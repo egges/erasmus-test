@@ -1,32 +1,35 @@
+from typing import Any
 import pandas as pd
 import json
 import os.path
 
+QF_JSON = "qf.json"
 
+def read_json_data() -> dict[str, Any]:
+    if not os.path.exists(QF_JSON):
+        return {}
+
+    with open(QF_JSON) as json_file:
+        return json.load(json_file)
+
+def write_json_data(data: dict[str, Any]):
+    with open('qf.json', 'w') as outfile:
+        json.dump(data, outfile)
 
 def main() -> None:
-    # Quarterfall object containing the data
-    qf = {}
-
-    # read the data from QF json file if it exists
-    if os.path.exists('qf.json'):
-        json_file = open('qf.json')
-        qf = json.load(json_file)
-        json_file.close()
-
+    # read the QF object data
+    qf = read_json_data()
     
-    # read the Excel file
+    # read the Excel file and print it to the console
     df = pd.read_excel("answer.xlsx")
     print(df)
 
     # verify that the computed value in the cell is correct
-    computed_value = df["Test"][3]
-    qf["sumCorrectlyComputed"] = bool(computed_value == 6)
+    qf["sumCorrectlyComputed"] = bool(df["Test"][3] == 6)
 
-    # write the qf data to the json file
-    outfile = open('qf.json', 'w')
-    json.dump(qf, outfile)
-    outfile.close()
+    # write the QF object data
+    write_json_data(qf)
+    
 
 if __name__ == "__main__":
     main()
