@@ -24,7 +24,7 @@ def main() -> None:
     df = pd.read_excel("answer.xlsx")
     print(df)
 
-    # verify that the computed value in the cell is correct
+    # verify that the computed value in cell A5 is correct
     qf["sumCorrectlyComputed"] = bool(df["Test"][3] == 6)
 
     # write the QF object data
